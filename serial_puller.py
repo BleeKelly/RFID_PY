@@ -17,7 +17,7 @@ if __name__ == '__main__':
     while True: #Infinite loop
         if ser_one.in_waiting > 0: #If message from first arduino is present, execute this block
             line = ser_one.readline().rstrip() #Reads data from serial port, decodes it from UTF-8 and strips the whitespace on the right
-	    print(line)
+            print(line)
 #            for row in csv.reader(line): #Reads csv formatted string
 #                arduino_data=row #Stores data
 #                df.loc[len(df)] = arduino_data #Appends to end of dataframe
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
         if ser_two.in_waiting > 0:
             line = ser_two.readline().rstrip()
-	    print(line)
+            print(line)
  #           for row in line:
  #               arduino_data=row
  #               df.loc[len(df)] = arduino_data
