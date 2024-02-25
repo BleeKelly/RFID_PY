@@ -27,12 +27,12 @@ if __name__ == '__main__':
             for row in csv.reader([line]): #Reads csv formatted string
                 #print(row)
                 arduino_data=row #Stores data
-                rfid_df.loc[len(rfid_df)] = arduino_data #Appends to end of dataframe
-                rfid_df.drop_duplicates(subset=['Location'], inplace=True)
+                rfid_df.iloc[len(rfid_df)] = arduino_data #Appends to end of dataframe
+                rfid_df.drop_duplicates(subset=['Location'], inplace=True)# Removes duplicates fo data from the dataframe based on location....Currently removes latest one but needs to remove first
                 html=rfid_df.to_html() #Creates Html Code
-                print(rfid_df)
+                print(rfid_df)#Prints updated dataframe to console
                 text_file = open("/home/pi/py_rfid/index.html", "w") #Opens html file to write to
-                text_file.write(html)
+                text_file.write(html)#Writes generated HTML code to index.html on Pi...Will likely point Apache webserver at it before Friday.
                 text_file.close() #Closes HTML.
                 #The above section should probably not be in the for loop for best performance but I didn't want to worry about scope at 1 in the morning...Will fix if needed
 
@@ -41,8 +41,11 @@ if __name__ == '__main__':
             line = ser_two.readline().rstrip()
             print(line)
  #           for row in line:
- #               arduino_data=row
- #               df.loc[len(df)] = arduino_data
- #               html=df.to_HTML()
- #               text_file = open("index.html", "w")
- #               text_file.write(html)
+ #               arduino_data=row #Stores data
+                rfid_df.iloc[len(rfid_df)] = arduino_data #Appends to end of dataframe
+                rfid_df.drop_duplicates(subset=['Location'], inplace=True)
+                html=rfid_df.to_html() #Creates Html Code
+                print(rfid_df)
+                text_file = open("/home/pi/py_rfid/index.html", "w") #Opens html file to write to
+                text_file.write(html)
+                text_file.close() #Closes HTML.
