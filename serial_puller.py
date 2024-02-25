@@ -14,17 +14,26 @@ if __name__ == '__main__':
     ser_one.reset_input_buffer() #Resets input buffer to prevent lingering signals
     ser_two = ser.Serial(USB_PORT_TWO,BAUD_RATE,timeout=1) #creates ser_two object for second arduino
     ser_two.reset_input_buffer() #Resets input buffer to prevent lingering signals
+    counter = 0
     while True: #Infinite loop
         if ser_one.in_waiting > 0: #If message from first arduino is present, execute this block
-            line = ser_one.readline().rstrip() #Reads data from serial port, decodes it from UTF-8 and strips the whitespace on the right
-            print(line)
-#            for row in csv.reader(line): #Reads csv formatted string
-#                arduino_data=row #Stores data
-#                df.loc[len(df)] = arduino_data #Appends to end of dataframe
-#                html=df.to_HTML() #Creates Html Code
-#                text_file = open("index.html", "w") #Opens html file to write to
-#                text_file.write(html) #Writes updated dataframe
-#                text_file.close() #Closes HTML.
+            if counter<5:
+                counter=counter+1
+                print(counter)
+                line = ser_one.readline().decode('UTF-8').rstrip() #Reads data from serial port, decodes it from UTF-8 and strips the whitespace on the right
+                print(line)
+                continue
+            line = ser_one.readline().decode('UTF-8').rstrip() #Reads data from serial port, decodes it from UTF-8 and strips the whitespace on the right
+            for row in csv.reader([line]): #Reads csv formatted string
+                #print(row)
+                arduino_data=row #Stores data
+                rfid_df.loc[len(rfid_df)] = arduino_data #Appends to end of dataframe
+                rfid_df.drop_duplicates(subset=['Location'], inplace=True)
+                html=rfid_df.to_html() #Creates Html Code
+                print(rfid_df)
+                text_file = open("/home/pi/py_rfid/index.html", "w") #Opens html file to write to
+                text_file.write(html)
+                text_file.close() #Closes HTML.
                 #The above section should probably not be in the for loop for best performance but I didn't want to worry about scope at 1 in the morning...Will fix if needed
 
 
